@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Bala\Showcase\EssentialStudio\blazor-showcase-floor-planner\Server\bin\Release\net6.0\publish\</_PublishTargetUrl>
+    <History>True|2024-01-23T11:03:01.5217027Z;True|2024-01-11T15:51:53.2854470+05:30;True|2023-12-26T11:03:10.8358320+05:30;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>
