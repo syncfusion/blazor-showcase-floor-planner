@@ -1,0 +1,711 @@
+@using Syncfusion.Blazor.Diagram
+@using Syncfusion.Blazor.Buttons
+@using System.Collections.ObjectModel
+@using System.Text.Json;
+@inherits SampleBaseComponent;
+
+@namespace FloorPlanner
+
+
+<div class="db-diagram-container">
+    <div id="diagramContainerDiv" class=@DiagramContainerClassName style="position:relative;">
+        <SfDiagramComponent @ref="@Diagram" NodeCreating="@OnNodeCreating"  ConnectorCreating= "@OnConnectorCreating" @bind-Width="@DiagramWidth" @bind-Height="@DiagramHeight" SizeChanged="@SizeChanged" PositionChanged ="@PositionChanged" RotationChanged="@RotateChanged" SelectionChanged ="@SelectionChanged" DragDrop="@Drop" HistoryChanged="@HistoryChange"  InteractionController="@DiagramTool" @bind-DrawingObject="@DiagramDrawingObject" ScrollChanged="ScrollChanged" CollectionChanged="CollectionChanged"  TextChanged="TextChanged" Created="OnCreated" GetCustomCursor="@cursor" @bind-Nodes="nodes" @bind-Connectors="connectors">
+            <PageSettings @bind-ShowPageBreaks="@DiagramShowPageBreaks" @bind-Orientation="@DiagramOrientation" @bind-Width="@DiagramPageWidth" @bind-Height="@DiagramPageHeight" @bind-MultiplePage=@IsMultiplePage>
+                <BackgroundStyle @bind-Background="@DiagramBgColor"></BackgroundStyle>
+                <PageMargin @bind-Left="@marginLeft" @bind-Top="@marginRight"></PageMargin>
+            </PageSettings>
+            <SnapSettings @bind-Constraints="@SnapConstraint">
+                <HorizontalGridLines LineIntervals="@SnapIntervals" LineColor="@Hlinecolor" SnapIntervals="@SnapIntervals1" DotIntervals="@HDotIntervals"></HorizontalGridLines>
+                <VerticalGridLines LineIntervals="@SnapIntervals" LineColor="@Vlinecolor" SnapIntervals="@SnapIntervals1" DotIntervals="@VDotIntervals"></VerticalGridLines>
+            </SnapSettings>
+            <ScrollSettings @bind-ScrollLimit="@scrollLimit" @bind-CurrentZoom="@CurrentZoom" @bind-MaxZoom="@maxZoom" @bind-MinZoom="@minZoom"></ScrollSettings>
+            <ContextMenuSettings Show="true"
+                                 @bind-Items="@Items"
+                                 ContextMenuItemClicked="@ItemClicked"></ContextMenuSettings>
+        </SfDiagramComponent>
+    </div>
+</div>
+@code {
+
+    /// <summary>
+    /// Gets or sets the collection of nodes in the diagram.
+    /// </summary>
+    public DiagramObjectCollection<Node> nodes { get; set; } = new DiagramObjectCollection<Node>();
+    /// <summary>
+    /// Gets or sets the collection of connectors in the diagram.
+    /// </summary>
+    public DiagramObjectCollection<Connector> connectors  {get;set;}= new DiagramObjectCollection<Connector>();
+    /// <summary>
+    /// Gets or sets the collection of user handles in the diagram.
+    /// </summary>
+    public DiagramObjectCollection<UserHandle> handles = new DiagramObjectCollection<UserHandle>();
+    /// <summary>
+    /// Gets or sets the CSS class applied to the main diagram container element in the application.
+    /// </summary>
+    public string DiagramContainerClassName = "db-current-diagram-container";
+    /// <summary>
+    /// Gets or sets the horizontal line intervals for the gridlines.
+    /// </summary>
+    public double[] HLineIntervals { get; set; } = new double[] { 1.25, 18.75, 0.25, 19.75, 0.25, 19.75, 0.25, 19.75, 0.25, 19.75,};
+    /// <summary>
+    /// Gets or sets the vertical line intervals for the gridlines.
+    /// </summary>
+    public double[] VLineIntervals { get; set; } = new double[] { 1.25, 18.75, 0.25, 19.75, 0.25, 19.75, 0.25, 19.75, 0.25, 19.75,};
+    /// <summary>
+    /// Represents a drawing object in the diagram.
+    /// </summary>
+    public IDiagramObject? DiagramDrawingObject { get; set; }
+    /// <summary>
+    /// Represents a diagram interaction tool.
+    /// </summary>
+    public DiagramInteractions DiagramTool = DiagramInteractions.Default;
+    /// <summary>
+    /// Gets or sets the scroll limit for the diagram's viewport.
+    /// </summary>
+    public ScrollLimitMode scrollLimit { get; set; } = ScrollLimitMode.Infinity;
+    /// <summary>
+    /// Gets or sets the current zoom level of the diagram.
+    /// </summary>
+    public double CurrentZoom { get; set; } = 1;
+    /// <summary>
+    /// Gets or sets the min zoom level of the diagram.
+    /// </summary>
+    public double minZoom { get; set; } = 0.25;
+    /// <summary>
+    /// Gets or sets the max zoom level of the diagram.
+    /// </summary>
+    public double maxZoom { get; set; } = 30;
+    /// <summary>
+    /// Gets or sets the value that indicates whether the diagram's page break should be visible
+    /// </summary>
+    public bool DiagramShowPageBreaks = false;
+    /// <summary>
+    /// Gets or sets the page orientation for the diagram.
+    /// </summary>
+    public PageOrientation DiagramOrientation = PageOrientation.Landscape;
+    /// <summary>
+    /// Gets or sets the page width for the diagram.
+    /// </summary>
+    public double? DiagramPageWidth = 916;
+    /// <summary>
+    /// Gets or sets the page height for the diagram.
+    /// </summary>
+    public double? DiagramPageHeight = 1056;
+    /// <summary>
+    /// Gets or sets the diagram's width.
+    /// </summary>
+    public string DiagramWidth = "100%";
+    /// <summary>
+    /// Gets or sets the diagram's height.
+    /// </summary>
+    public string DiagramHeight = "100%";
+    /// <summary>
+    /// Gets or sets the left margin of the diagram content.
+    /// </summary>
+    double marginLeft = 5;
+    /// <summary>
+    /// Gets or sets the right margin of the diagram content.
+    /// </summary>
+    double marginRight = 5;
+    /// <summary>
+    /// Gets or sets the horizontal grid color of the diagram.
+    /// </summary>
+    public string Hlinecolor { get; set; } = "lightgray";
+    /// <summary>
+    /// Gets or sets the vertical grid color of the diagram.
+    /// </summary>
+    public string Vlinecolor { get; set; } = "lightgray";
+    /// <summary>
+    /// Gets or sets a value indicating whether the diagram is set to display multiple pages.
+    /// </summary>
+    public bool IsMultiplePage = false;
+    /// <summary>
+    /// Gets or sets the snap interval for the diagram.
+    /// </summary>
+    public double[] SnapIntervals1 { get; set; } = new double[] { 20 };
+    /// <summary>
+    /// Gets or sets a value indicating whether an undo operation is available in the diagram.
+    /// </summary>
+    public bool IsUndo = false;
+    /// <summary>
+    /// Gets or sets a value indicating whether a redo operation is available in the diagram.
+    /// </summary>
+    public bool IsRedo = false;
+    /// <summary>
+    /// Gets or sets the background color of the diagram.
+    /// </summary>
+    public string DiagramBgColor = "white";
+    /// <summary>
+    /// Gets or sets the snap constraint for the diagram.
+    /// </summary>
+    public SnapConstraints SnapConstraint = SnapConstraints.All;
+    /// <summary>
+    /// Gets or sets the snap intervals in the diagram.
+    /// </summary>
+
+    public double[] SnapIntervals { get; set; } = new double[] {
+            1, 9, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75
+    };
+    /// <summary>
+    /// Gets or sets the vertical spacing.
+    /// </summary>
+    int VerticalSpacing = 50;
+    /// <summary>
+    /// Gets or sets the vertical spacing.
+    /// </summary>
+    int HorizontalSpacing = 100;
+    public bool show = true;
+    /// <summary>
+    /// Property used to indicate when a diagram element is selected or deselected.
+    /// </summary>
+    public bool diagramSelected = false;
+
+    DiagramObjectCollection<KeyboardCommand> commands = new DiagramObjectCollection<KeyboardCommand>();
+    /// <summary>
+    /// Gets or sets the context menu items.
+    /// </summary>
+    List<ContextMenuItem> Items = new List<ContextMenuItem>();
+
+
+    public double[] HDotIntervals { get; set; } = new double[] { 1, 19, 0.5, 19.5, 0.5, 19.5, 0.5, 19.5, 0.5, 19.5, };
+    public double[] VDotIntervals { get; set; } = new double[] { 1, 19, 0.5, 19.5, 0.5, 19.5, 0.5, 19.5, 0.5, 19.5, };
+#pragma warning disable CS0414
+    /// <summary>
+    /// Gets or sets the horizontal alignment of the objects in diagram.
+    /// </summary>
+    private HorizontalAlignment horizontalAlignment = HorizontalAlignment.Auto;
+    /// <summary>
+    /// Gets or sets the vertical alignment of the objects in diagram.
+    /// </summary>
+    private VerticalAlignment verticalAlignment = VerticalAlignment.Auto;
+#pragma warning restore CS0414
+            
+    protected override void OnInitialized()
+    {
+        InitDiagramModel();
+        base.OnInitialized();
+    }
+
+    /// <summary>
+    /// This method is used to provide height and width of the node while creating
+    /// </summary>
+    /// <param name="obj">The node object to which the height and width has to be changed</param>
+    private void OnNodeCreating(IDiagramObject obj)
+    {
+        Node node = new Node();
+        if (obj != null && obj is Node nodeobj)
+        {
+            node = nodeobj;
+            node.Constraints = node.Constraints |= NodeConstraints.AllowDrop;
+        }
+        if (Parent.MenuBar.IsPasteOptionEnabled)
+        {
+            Parent.MenuBar.IsPasteOptionEnabled = false;
+        }
+    }
+
+    /// <summary>
+    /// This method is used to provide height and width of the connector while creating
+    /// </summary>
+    /// <param name="obj">The connector object to which the height and width has to be changed</param>
+    private void OnConnectorCreating(IDiagramObject obj)
+    {
+        Connector connector = new Connector();
+        if (obj != null && obj is Connector connecobj)
+        {
+            connector = connecobj;
+            connector.Style.Fill = "black";
+            connector.Style.StrokeColor = "black";
+            connector.Style.Opacity = 1;
+            connector.TargetDecorator.Shape = DecoratorShape.None;
+        }
+    }
+
+    /// <summary>
+    /// This method is called when the context menu item is clicked
+    /// </summary>  
+    private void ItemClicked(DiagramMenuClickEventArgs args)
+    {
+        if(args.Item.Text =="Paste")
+        {
+            Parent.MenuBar.IsPasteOptionEnabled = true;
+        }
+    }
+
+
+    /// <summary>
+    /// Sets the cursor for a specific diagram element action.
+    /// </summary>
+    /// <param name="action">The diagram element action for which to set the cursor.</param>
+    /// <param name="active">A flag indicating whether the cursor is in an active state.</param>
+    /// <param name="handle">The handle associated to the current position</param>
+    public string cursor(DiagramElementAction action, bool active, string handle)
+    {
+#pragma warning disable CS8603 
+        string? cursors = null;
+        if (handle == "Draw")
+        {
+            cursors = "crosshair";
+        }
+        return cursors;
+#pragma warning restore CS8603 
+    }
+
+    /// <summary>
+    /// This method will be called when node's/connector's position is changed.
+    /// </summary>
+    /// <param name="args">The event arguments containing information about the position change.</param>
+    private void PositionChanged(PositionChangedEventArgs args)
+    {
+        Parent.DiagramPropertyPanel.UpdatePropertyPanel();
+    }
+
+    /// <summary>
+    /// This method will be called when node's/connector's size is changed.
+    /// </summary>
+    /// <param name="args">The event arguments containing information about the size change.</param>
+    private void SizeChanged(SizeChangedEventArgs args)
+    {
+        Parent.DiagramPropertyPanel.UpdatePropertyPanel();
+    }
+
+    /// <summary>
+    /// This method will be called when node's/connector's rotation angle is changed.
+    /// </summary>
+    /// <param name="args">The event arguments containing information about the rotation angle.</param>
+    private void RotateChanged(RotationChangedEventArgs args)
+    {
+        Parent.DiagramPropertyPanel.NodeRotateAngleValue(args.NewValue.RotationAngle);
+    }
+
+    /// <summary>
+    /// This method will be called when a symbol is dragged and dropped from the symbol palette to the drawing area.
+    /// </summary>
+    /// <param name="args">The event arguments containing information about the node/connector</param>
+    private void Drop(DropEventArgs args)
+    {
+        if(args.Element is Node)
+        {
+            Parent.DiagramPropertyPanel.slider();
+        }
+        else if(args.Element is Connector)
+        {
+            Parent.DiagramPropertyPanel.sliderConnector();
+        }
+        if (args.Element is Node node && node.Tooltip != null)
+        {
+            node.Tooltip = null;
+            node.Constraints &= ~NodeConstraints.Tooltip;
+        }
+        else if (args.Element is Connector connector1 && connector1.Tooltip != null)
+        {
+            connector1.Tooltip = null;
+            connector1.Constraints &= ~ConnectorConstraints.Tooltip;
+        }
+    }
+
+    /// <summary>
+    /// Event handler for the selection changed event in the Syncfusion Blazor Diagram component.
+    /// </summary>
+    /// <param name="args">The event arguments containing information about the selection change.</param>
+    private async Task SelectionChanged(Syncfusion.Blazor.Diagram.SelectionChangedEventArgs args)
+    {
+        bool hasContinuousDraw = Diagram.InteractionController.HasFlag(DiagramInteractions.ContinuousDraw);
+        if (Diagram.DrawingObject == null && ((!hasContinuousDraw) || (hasContinuousDraw && args.NewValue.Count > 0)))
+        {
+            Parent.Toolbar.EnableToolbarItems(args.NewValue, "selectionchange");
+            int ObjectsLength = Diagram.SelectionSettings.Nodes.Count + Diagram.SelectionSettings.Connectors.Count;
+            Parent.DiagramPropertyPanel.removeClassInElement("nodePropertyContainer", " multiple");
+            Parent.DiagramPropertyPanel.removeClassInElement("nodePropertyContainer", " connector");
+
+            if  (ObjectsLength > 1 && (Diagram.SelectionSettings.Nodes.Count > 0 && (Diagram.SelectionSettings.Connectors.Count > 0)))
+            {
+                diagramSelected = false;
+                this.MultipleSelectionSettings(args.NewValue);
+            }
+            else if (ObjectsLength > 1 && (Diagram.SelectionSettings.Nodes.Count > 0 || (Diagram.SelectionSettings.Connectors.Count > 0)))
+            {
+                diagramSelected = false;
+                Parent.DiagramContent.StateChanged();
+                this.MultipleSelectionSettings(args.NewValue);
+            }
+            else if (ObjectsLength == 1 && (Diagram.SelectionSettings.Nodes.Count == 1 || Diagram.SelectionSettings.Connectors.Count == 1))
+            {
+
+                if (Diagram.SelectionSettings.Nodes.Count == 1)
+                {
+                    Node node = Diagram.SelectionSettings.Nodes[0];
+                    Parent.DiagramPropertyPanel.PanelVisibility();
+                    Parent.DiagramPropertyPanel.slider();
+
+                }
+                else if (Diagram.SelectionSettings.Connectors.Count == 1)
+                {
+                    if (Diagram.SelectionSettings.Connectors.Count > 0)
+                    {
+                        Parent.DiagramPropertyPanel.PanelVisibility();
+                        Parent.DiagramPropertyPanel.sliderConnector();
+                    }
+                }
+                diagramSelected = false;
+                Parent.Toolbar.SingleSelectionToolbarItems();
+            }
+            else
+            {
+                diagramSelected = true;
+                Parent.DiagramPropertyPanel.PanelVisibility();
+                Parent.DiagramPropertyPanel.BindDiagramProperties();
+                Parent.Toolbar.DiagramSelectionToolbarItems();
+            }
+            StateHasChanged();
+        }else
+        {
+            if (Diagram.DrawingObject != null && Diagram.DrawingObject is Connector)
+            {
+                diagramSelected = false;
+                Parent.DiagramPropertyPanel.PanelVisibility();
+                Parent.DiagramPropertyPanel.sliderConnector();
+                Parent.Toolbar.SingleSelectionToolbarItems();
+            }
+            StateHasChanged();
+        }
+    }
+
+    /// <summary>
+    /// Event handler for the history changed event in the Syncfusion Blazor Diagram component.
+    /// </summary>
+    /// <param name="args">The event arguments containing information about the history change.</param>
+    private void HistoryChange(HistoryChangedEventArgs args)
+    {
+        Parent.Toolbar.EnableToolbarItems(new object() { }, "historychange");
+    }
+
+    /// <summary>
+    /// Event handler for the scroll changed event.
+    /// </summary>
+    /// <param name="args">The event arguments containing information about the scroll change.</param>
+    private void ScrollChanged(ScrollChangedEventArgs args)
+    {
+        if((Parent.DiagramContent.CurrentZoom >= 0.25 && Parent.DiagramContent.CurrentZoom <= 30) && Parent.Toolbar.ZoomItemDropdownContent != FormattableString.Invariant($"{Math.Round(Parent.DiagramContent.CurrentZoom * 100)}") + "%")
+        {
+            Parent.Toolbar.DiagramZoomValueChange();
+        }
+    }
+    /// <summary>
+    /// Event handler for the selection changed event for multiple selection in the Syncfusion Blazor Diagram component.
+    /// </summary>
+    /// <param name="SelectedItems">The event arguments containing information about the selection change.</param>
+    private void MultipleSelectionSettings(ObservableCollection<IDiagramObject> SelectedItems)
+    {
+        Parent.DiagramPropertyPanel.PropertyPanelVisibility();
+        bool showConnectorPanel = false; bool showNodePanel = false;
+        bool showTextPanel = false; bool showConTextPanel = false;
+
+        for (int i = 0; i < Diagram.SelectionSettings.Nodes.Count; i++)
+        {
+            Node Node = Diagram.SelectionSettings.Nodes[i];
+            if (Node != null && (!showNodePanel || !showTextPanel))
+            {
+                showNodePanel = true;
+                showTextPanel = Node.Annotations.Count > 0 && Node.Annotations[0].Content != "" ? true : false;
+            }
+        }
+        for (int i = 0; i < Diagram.SelectionSettings.Connectors.Count; i++)
+        {
+            Connector Connector = Diagram.SelectionSettings.Connectors[i];
+            if (Connector != null && (!showConnectorPanel || !showConTextPanel))
+            {
+                showConnectorPanel = true;
+                showConTextPanel = Connector.Annotations.Count > 0 && Connector.Annotations[0].Content != "" ? true : false;
+            }
+        }
+        if (showNodePanel)
+        {
+
+            Parent.DiagramPropertyPanel.addClassInElement("nodePropertyContainer", " multiple");
+
+            if (showConnectorPanel)
+            {
+
+                Parent.DiagramPropertyPanel.addClassInElement("nodePropertyContainer", " connector");
+            }
+            Parent.DiagramPropertyPanel.PanelVisibility();
+            if (Diagram.SelectionSettings.Nodes.Count == 1)
+                Parent.DiagramPropertyPanel.SingleNodeSelection();
+        }
+        if (showConnectorPanel && !showNodePanel)
+        {
+            Parent.DiagramPropertyPanel.PanelVisibility();
+
+            Parent.DiagramPropertyPanel.SingleConnectorSelection();
+        }
+        if (showTextPanel || showConTextPanel)
+        {
+            Parent.DiagramPropertyPanel.TextPropertyPanelVisibility();
+
+        }
+        Parent.Toolbar.MutipleSelectionToolbarItems();
+    }
+
+    /// <summary>
+    /// Sets the Pan mode to diagram tool
+    /// </summary>
+    public void UpdateTool()
+    {
+        DiagramTool = DiagramInteractions.ZoomPan;
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Sets the connector object of type straight/orthogonal/bezier to the draw object
+    /// </summary>
+    public void DrawingObject(Syncfusion.Blazor.SplitButtons.MenuEventArgs args)
+    {
+        if (args.Item.Text == "Straight Line")
+        {
+        }
+        else if (args.Item.Text == "Orthogonal Line")
+        {
+            Parent.DiagramContent.DiagramDrawingObject = new Connector() { Type = ConnectorSegmentType.Orthogonal, Constraints = ConnectorConstraints.Default, Style = new ShapeStyle() {  StrokeWidth = 2 } };
+        }
+        else if (args.Item.Text == "Bezier")
+        {
+            Parent.DiagramContent.DiagramDrawingObject = new Connector() { Type = ConnectorSegmentType.Bezier, Constraints = ConnectorConstraints.Default, Style = new ShapeStyle() {  StrokeWidth = 2 } };
+        }
+    }
+
+    /// <summary>
+    ///This method is used to set the ContinuousDraw to the Drawtool
+    /// </summary>
+    public void UpdateContinousDrawTool()
+    {
+        DiagramTool = DiagramInteractions.ContinuousDraw;
+        StateHasChanged();
+    }
+
+    /// <summary>
+    ///This method is used to set the pointer option to the Drawtool
+    /// </summary>
+    public void UpdatePointerTool()
+    {
+        DiagramTool = DiagramInteractions.SingleSelect | DiagramInteractions.MultipleSelect;
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Zooms to a specific level or region based on the provided zoom options.
+    /// </summary>
+    /// <param name="options">The zoom options specifying the target zoom level or region.</param>
+    public void ZoomTo(ZoomOptions options)
+    {
+        double factor = options.ZoomFactor != 0 ? options.ZoomFactor : 0.2;
+        factor = options.Type == "ZoomOut" ? 1 / (1 + factor) : (1 + factor);
+        Diagram.Zoom(factor, null);
+    }
+    /// <summary>
+    /// Represents options for zooming functionality.
+    /// </summary>
+    public class ZoomOptions
+    {
+        public double ZoomFactor { get; set; }
+        public string Type { get; set; } = "";
+    }
+
+    public void StateChanged()
+    {
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Loads a new diagram based on the provided JSON representation.
+    /// </summary>
+    /// <param name="Json">The JSON representation of the diagram to load.</param>
+    public void LoadNewDiagram(string Json)
+    {
+        _= Diagram.LoadDiagram(Json);
+    }
+
+    /// <summary>
+    /// Updates the spacing of elements based on the provided value and type.
+    /// </summary>
+    /// <param name="value">The spacing value to apply.</param>
+    /// <param name="type">The type of spacing to update (e.g., horizontal, vertical).</param>
+    public async Task UpdateSpacing(int value, string type)
+    {
+        SfDiagramComponent diagram = Parent.DiagramContent.Diagram;
+        diagram.BeginUpdate();
+        if (type == "Horizontal")
+            HorizontalSpacing = value;
+        else if (type == "Vertical")
+            VerticalSpacing = value;
+        await diagram.EndUpdate();
+    }
+
+    /// <summary>
+    /// Updates the alignment of selected objects in the diagram.
+    /// </summary>
+    /// <param name="alignment">The alignment value to apply (e.g., "left", "right", "center", "top", "bottom", etc.).</param>
+    public async Task UpdateAlignment(string alignment)
+    {
+        SfDiagramComponent diagram = Parent.DiagramContent.Diagram;
+        diagram.BeginUpdate();
+        switch (alignment)
+        {
+            case "Align Left":
+                horizontalAlignment = HorizontalAlignment.Left;
+                break;
+            case "Align Right":
+                horizontalAlignment = HorizontalAlignment.Right;
+                break;
+            case "Align Center":
+                horizontalAlignment = HorizontalAlignment.Center;
+                break;
+            case "Align Top":
+                verticalAlignment = VerticalAlignment.Top;
+                break;
+            case "Align Middle":
+                verticalAlignment = VerticalAlignment.Center;
+                break;
+            case "Align Bottom":
+                verticalAlignment = VerticalAlignment.Bottom;
+                break;
+        }
+        await diagram.EndUpdate();
+    }
+       
+    // Method to determine whether this command can execute or not.
+    public void CanExecute(CommandKeyArgs args)
+    {
+        args.CanExecute = true;
+    }
+
+    // Method to execute the custom command
+    public async Task ExecuteCommand(CommandKeyArgs obj)
+    {
+        {
+            if ((Diagram.SelectionSettings.Nodes.Count > 0 || Diagram.SelectionSettings.Connectors.Count > 0))
+            {
+                if (obj.Name == "duplicate")
+                {
+                    Diagram.Copy();
+                    Diagram.Paste();
+                }
+                if (obj.Name == "group")
+                {
+                    GroupObjects();
+                }
+                if (obj.Name == "unGroup")
+                {
+                    UngroupObjects();
+                }
+                if (obj.Name == "sendToBack")
+                {
+                    Diagram.SendToBack();
+                }
+                if (obj.Name == "bringToFront")
+                {
+                    Diagram.BringToFront();
+                }
+            }
+        }
+        if (obj.Name == "fileNew")
+        {
+            if (jsRuntime != null)
+            {
+                await jsRuntime.InvokeVoidAsync("CommonKeyboardCommands_newDiagram");
+            }
+        }
+        if (obj.Name == "fileOpen")
+        {
+            await Parent.MenuBar.OpenUploadBox(true, ".json");
+        }
+        if (obj.Name == "fileSave" && jsRuntime != null)
+        {
+            string fileName = await jsRuntime.InvokeAsync<string>("getDiagramFileName", "");
+            await Parent.MenuBar.Download(fileName);
+        }
+    }
+
+    /// <summary>
+    /// Group the selected objects in the diagram.
+    /// </summary>
+    public void GroupObjects()
+    {
+        Diagram.Group();
+        Parent.Toolbar.GroupIcon = "e-icons sf-icon-Ungroup tb-icons";
+        Parent.Toolbar.GroupToolTip = "UnGroup";
+        Parent.Toolbar.StateChanged();
+    }
+
+    /// <summary>
+    /// Ungroups the selected objects in the diagram.
+    /// </summary>
+    public void UngroupObjects()
+    {
+        Diagram.Ungroup();
+        Diagram.ClearSelection();
+        diagramSelected = true;
+        Parent.Toolbar.GroupIcon = "e-icons sf-icon-Group tb-icons";
+        Parent.Toolbar.GroupToolTip = "Group";
+        Parent.DiagramPropertyPanel.PanelVisibility();
+        Parent.DiagramPropertyPanel.BindDiagramProperties();
+        Parent.Toolbar.DiagramSelectionToolbarItems();
+    }
+    /// <summary>
+    /// Method to create a unique ID.
+    /// </summary>
+    public string RandomId()
+    {
+        Random random = new Random();
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+#pragma warning disable CA5394 // Do not use insecure randomness
+        return new string(Enumerable.Repeat(chars, 5)
+          .Select(s => s[random.Next(s.Length)]).ToArray());
+#pragma warning restore CA5394 // Do not use insecure randomness
+    }
+
+    /// <summary>
+    /// Event handler for the text changed event .
+    /// </summary>
+    /// <param name="args">The event arguments containing information about the text change.</param>
+    private async void TextChanged(TextChangeEventArgs args)
+    {
+        if(args != null)
+        {
+            if((!string.IsNullOrEmpty(args.OldValue) || string.IsNullOrWhiteSpace(args.OldValue)) && args.NewValue.Length > 0 && args.Element != null)
+            {
+                await Task.Delay(1);
+                Node? node = args.Element is Node ? args.Element as Node : null;
+                Connector? connector = args.Element is Connector ? args.Element as Connector : null;
+                if ((node != null && node.Annotations != null && node.Annotations.Count > 0 && (node.Annotations[0].Content != "" || (node.Annotations[0].Hyperlink != null && (node.Annotations[0].Hyperlink.Url != "" || node.Annotations[0].Hyperlink.Content != "")))) || ((connector != null && connector.Annotations != null && connector.Annotations.Count > 0 && connector.Annotations[0].Content != string.Empty)))
+                {
+                    if (node != null && node.Annotations != null && node.Annotations[0] != null && node.Annotations[0]?.Hyperlink != null)
+                    {
+                        HyperlinkSettings hyperlink = node.Annotations[0].Hyperlink;
+                        node.Annotations[0].Hyperlink = new HyperlinkSettings() { Content = !string.IsNullOrEmpty(hyperlink.Content) ? node.Annotations[0].Content : string.Empty, Url = hyperlink.Content != "" ? hyperlink.Url : node.Annotations[0].Content };
+                    }
+                    Parent.DiagramPropertyPanel.PanelVisibility();
+                    Parent.DiagramPropertyPanel.slider();
+                    StateChanged();
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Event handler for the collection changed event.
+    /// </summary>
+    /// <param name="args">The event arguments containing information about the collection change.</param>
+    private void CollectionChanged(CollectionChangedEventArgs args)
+    {
+
+        if(args.Action == CollectionChangedAction.Remove)
+        {
+            diagramSelected = true;
+            Parent.DiagramPropertyPanel.PanelVisibility(false);
+            Parent.DiagramPropertyPanel.BindDiagramProperties();
+            Parent.Toolbar.DiagramSelectionToolbarItems(false);
+            StateHasChanged();
+        }
+    }
+}

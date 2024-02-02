@@ -1,0 +1,8 @@
+Server/bin
+Server/obj
+WASM/bin
+WASM/obj
+Common/BlazorServerCommon_NET6/bin
+Common/BlazorWasmCommon_NET6/obj
+.vs/
+.git/

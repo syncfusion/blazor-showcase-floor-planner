@@ -1,0 +1,135 @@
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Diagram
+@using Syncfusion.Blazor.Diagram.SymbolPalette
+@using System.Collections.ObjectModel
+@using FloorPlanner.Shared
+
+@namespace FloorPlanner
+
+<div class="db-palette-parent">
+
+    <SfSymbolPaletteComponent @ref="@PaletteInstance" Width="100%" Height="100%" GetSymbolInfo="GetSymbolInfo"
+                      Palettes="@Palettes" SymbolDragPreviewSize="@SymbolPreview" SymbolMargin="@SymbolMargin">                 
+    </SfSymbolPaletteComponent>
+</div>
+
+@code {
+    internal DiagramLeftSideBar? Parent { get; set; }
+
+    SfSymbolPaletteComponent? PaletteInstance { get; set; }
+
+    /// <summary>
+    /// Gets or sets the symbol preview size for an item in the Symbol Palette.
+    /// </summary>
+    DiagramSize SymbolPreview = new DiagramSize();
+    /// <summary>
+    /// Gets or sets the symbol preview margin for an item in the Symbol Palette.
+    /// </summary>
+    SymbolMargin SymbolMargin = new SymbolMargin { Left = 2, Right = 2, Top = 2, Bottom = 2 };
+    /// <summary>
+    /// Gets or sets the symbol width for an item in the Symbol Palette.
+    /// </summary>
+    double symbolSizeWidth;
+    /// <summary>
+    /// Gets or sets the symbol height for an item in the Symbol Palette.
+    /// </summary>
+    double symbolSizeHeight;
+    /// <summary>
+    /// Reference to the palettes in the symbol palette
+    /// </summary>
+    DiagramObjectCollection<Palette>? Palettes { get; set; }
+
+    /// <summary>
+    /// Gets or sets the Door shape symbols.
+    /// </summary>
+    public DiagramObjectCollection<NodeBase> DoorSymbols { get; set; } = new DiagramObjectCollection<NodeBase>();
+    /// <summary>
+    /// Gets or sets the DiningRoom shape symbols.
+    /// </summary>
+    public DiagramObjectCollection<NodeBase> DiningRoomSymbols { get; set; } = new DiagramObjectCollection<NodeBase>();
+    /// <summary>
+    /// Gets or sets the Kitchen shape symbols.
+    /// </summary>
+    public DiagramObjectCollection<NodeBase> KitchenSymbols { get; set; } = new DiagramObjectCollection<NodeBase>();
+    /// <summary>
+    /// Gets or sets the BedRoom shape symbols.
+    /// </summary>
+    public DiagramObjectCollection<NodeBase> BedRoomSymbols { get; set; } = new DiagramObjectCollection<NodeBase>();
+    /// <summary>
+    /// Gets or sets the LivingRoom shape symbols.
+    /// </summary>
+    public DiagramObjectCollection<NodeBase> LivingRoomSymbols { get; set; } = new DiagramObjectCollection<NodeBase>();
+    /// <summary>
+    /// Gets or sets the BathRoom shape symbols.
+    /// </summary>
+    public DiagramObjectCollection<NodeBase> BathRoomSymbols { get; set; } = new DiagramObjectCollection<NodeBase>();
+
+
+    protected override void OnInitialized()
+    {
+        symbolSizeWidth = 50;
+        symbolSizeHeight = 50;
+        SymbolPreview = new DiagramSize();
+        SymbolPreview.Width = 50;
+        SymbolPreview.Height = 50;
+        //Initializes the palette
+        InitializePalettes();
+        Palette Door = new Palette() { Symbols = DoorSymbols, Title = "Doors and Walls", ID = "Door", IconCss = "e-ddb-icons e-flow" };
+        Palette DiningRoom = new Palette() { Symbols = DiningRoomSymbols, Title = "Dining Room", ID = "DiningRoom", IconCss = "e-ddb-icons e-flow" };
+        Palette Kitchen = new Palette() { Symbols = KitchenSymbols, Title = "Kitchen", ID = "Kitchen", IconCss = "e-ddb-icons e-flow" };
+        Palette BedRoom = new Palette() { Symbols = BedRoomSymbols, Title = "Bed Room", ID = "BedRoom", IconCss = "e-ddb-icons e-flow" };
+        Palette LivingRoom = new Palette() { Symbols = LivingRoomSymbols, Title = "Living Room", ID = "LivingRoom", IconCss = "e-ddb-icons e-flow" };
+        Palette BathRoom = new Palette() { Symbols = BathRoomSymbols, Title = "Bath Room", ID = "BathRoom", IconCss = "e-ddb-icons e-flow" };
+        Palettes = new DiagramObjectCollection<Palette>();
+        if (Palettes != null)
+        {
+            Palettes.Add(Door);
+            Palettes.Add(DiningRoom);
+            Palettes.Add(Kitchen);
+            Palettes.Add(BedRoom);
+            Palettes.Add(LivingRoom);
+            Palettes.Add(BathRoom);
+        }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (PaletteInstance != null)
+        {
+            PaletteInstance.Targets = new DiagramObjectCollection<SfDiagramComponent>() { };
+        }
+        DiagramMainContent diagramContent = Parent?.Parent?.DiagramContent;
+        if (diagramContent != null)
+        {
+            if (PaletteInstance != null)
+            {
+                PaletteInstance.Targets.Add(diagramContent.Diagram);
+            }
+        }
+        if (firstRender)
+        {
+            await Task.Delay(1).ConfigureAwait(true);
+        }
+    }
+
+    /// <summary>
+    /// This method provides the symbol information
+    /// </summary>
+    private SymbolInfo GetSymbolInfo(IDiagramObject symbol)
+    {
+        SymbolInfo SymbolInfo = new SymbolInfo();
+        SymbolInfo.Fit = true;
+        string text = "";
+        if (symbol != null)
+        {
+            if (symbol is Node node)
+            {
+                text = (node.Shape as Shape).Type.ToString() + node.ID;
+            }
+            else if (symbol is Connector connector)
+            {
+                text = "connectors" + connector.ID;
+            }
+        }
+        return SymbolInfo;
+    }
+}
