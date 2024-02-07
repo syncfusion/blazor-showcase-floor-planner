@@ -18,6 +18,7 @@ The samples require the following requirements to run.
 
 ## Demo
 
-### <a href="https://blazor.syncfusion.com/showcase/floorplanner/" target="_blank">https://blazor.syncfusion.com/showcase/floorplanner/</a>
+### Server -  <a href="https://blazor.syncfusion.com/showcase/floor-planner/" target="_blank">https://blazor.syncfusion.com/showcase/floor-planner/</a>
+### WebAssembly  - <a href="https://blazor.syncfusion.com/showcase/wasm/floor-planner/" target="_blank">https://blazor.syncfusion.com/showcase/wasm/floor-planner/</a>
 
 Check all the showcase samples from <a href="https://blazor.syncfusion.com" target="_blank">here</a>.
