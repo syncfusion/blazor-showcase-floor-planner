@@ -8,7 +8,7 @@ A floor plan is a type of drawing that shows you the layout of a home or propert
 The samples require the following requirements to run.
 
 * [Visual Studio 2022](https://visualstudio.microsoft.com/vs/)
-* [.NET 6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+* [.NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
 ### Run
 

@@ -3,20 +3,17 @@
 @inject IJSRuntime JsRuntime;
 @inject SyncfusionBlazorService SyncfusionBlazorService;
 @using Syncfusion.Blazor;
-@using FloorPlanner;
-@using FloorPlanner.Shared
+@namespace BlazorServerCommon_NET6
 @inject Microsoft.AspNetCore.Components.NavigationManager UriHelper;
-@namespace FloorPlanner.Shared
 <SpinnerComponent @ref="SpinnerObj"></SpinnerComponent>
 <DiagramMain @ref="DiagramMain"></DiagramMain>
 
 @code{
     [Inject]
-    SyncfusionBlazorService? SyncfusionService { get; set; }
+    SyncfusionBlazorService SyncfusionService { get; set; }
 
-    public DiagramMain? DiagramMain { get; set; }
-    public SpinnerComponent? SpinnerObj { get; set; }
-
+    public DiagramMain DiagramMain { get; set; }
+    public SpinnerComponent SpinnerObj { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -28,7 +25,7 @@
     {
         await InvokeAsync(() =>
         {
-            this.SpinnerObj?.Hide();
+            this.SpinnerObj.Hide();
             this.Service.Prop.HideSpinner = false;
             this.Service.Prop.RestricMouseEvents = false;
 
@@ -45,11 +42,17 @@
         if (UriHelper.Uri.IndexOf("material") > 0)
         {
 
-            SyncfusionService!.EnableRipple(); ;
+            SyncfusionService.EnableRipple(); ;
         }
         else
         {
-            SyncfusionService!.EnableRipple(); ;
+            SyncfusionService.EnableRipple(); ;
+        }
+        if (this.SpinnerObj.HideClass == "sb-trans")
+        {
+            this.SpinnerObj.Hide();
+            this.Service.Prop.HideSpinner = false;
+            this.Service.Prop.RestricMouseEvents = false;
         }
     }
     public void Dispose()

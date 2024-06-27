@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34310.174
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FloorPlanner", "FloorPlanner.csproj", "{88C042BB-3545-48EE-B10B-00667598F717}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerCommon_NET8", "..\..\..\Common\BlazorServerCommon_NET8.csproj", "{6608E683-6EFB-4747-B752-963F39D79352}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{88C042BB-3545-48EE-B10B-00667598F717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88C042BB-3545-48EE-B10B-00667598F717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88C042BB-3545-48EE-B10B-00667598F717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88C042BB-3545-48EE-B10B-00667598F717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6608E683-6EFB-4747-B752-963F39D79352}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6608E683-6EFB-4747-B752-963F39D79352}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6608E683-6EFB-4747-B752-963F39D79352}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6608E683-6EFB-4747-B752-963F39D79352}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C5A2812B-9AD4-4C7B-BF30-96336657874D}
+	EndGlobalSection
+EndGlobal
