@@ -23,11 +23,7 @@
         await base.OnInitializedAsync();
         Service.Notify += OnNotify;
     }
-    /// <summary>
-    /// Event callback to notify the spinner component to hide.
-    /// </summary>
-    /// <param name="prop"></param>
-    /// <returns></returns>
+
     public async Task OnNotify(NotifyProperties prop)
     {
         await InvokeAsync(() =>

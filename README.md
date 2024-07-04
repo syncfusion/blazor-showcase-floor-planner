@@ -8,13 +8,15 @@ A floor plan is a type of drawing that shows you the layout of a home or propert
 The samples require the following requirements to run.
 
 * [Visual Studio 2022](https://visualstudio.microsoft.com/vs/)
-* [.NET 6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+* [.NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
 ### Run
 
-* Clone this repository.
-* Open the project in Visual Studio 2022.
-* Run the demo.
+1. Clone this repository.
+2. Open the project in VS 2022:
+	- For the .NET 8 Server app, open Server/FloorPlanner.sln.
+	- For the .NET 8 WASM app, open WASM/FloorPlanner.sln.
+3. Run the demo.
 
 ## Demo
 
