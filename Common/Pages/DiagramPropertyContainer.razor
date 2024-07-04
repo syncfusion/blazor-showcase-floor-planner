@@ -1095,7 +1095,7 @@
     /// <summary>
     /// This method is used to display the property panel items based on the selected items.
     /// </summary>
-    public void PanelVisibility(bool isRefresh = true){
+    public void PanelVisibility(){
 
         SfDiagramComponent Diagram = Parent.DiagramContent.Diagram;
         NodePropertyVisibility = "none";
@@ -1117,8 +1117,7 @@
             DiagramPropertyVisibility = "block";
             BindDiagramProperties();
         }
-        if(isRefresh)
-            StateHasChanged();
+        StateHasChanged();
     }
     /// <summary>
     /// Sets the visibility of the property panel.
