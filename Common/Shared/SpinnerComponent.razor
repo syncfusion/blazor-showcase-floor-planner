@@ -11,19 +11,32 @@
 </div>
 
 @code {
+    /// <summary>
+    /// Represents the MainLayout instance associated with the current component.
+    /// </summary>
     internal MainLayout? Parent;
-
+    /// <summary>
+    /// Gets or sets the CSS class used to hide the main body overlay.
+    /// </summary>
     [Parameter]
     public string? HideClass { get; set; }
-
+    /// <summary>
+    /// Gets or sets the CSS class used to hide the inner content.
+    /// </summary>
     [Parameter]
     public string? HideInnerClass { get; set; }
-
+    /// <summary>
+    /// Gets or sets the CSS class used for transition effects.
+    /// </summary>
     [Parameter]
     public string? TransClass { get; set; }
-
+    /// <summary>
+    /// Gets or sets a value indicating whether the SpinnerComponent is visible or not.
+    /// </summary>
     private bool VisibleProperty { get; set; } = true;
-
+    /// <summary>
+    /// Sets the TransClass and HideClass properties to display a transition effect.
+    /// </summary>
     public void ShowasTrans()
     {
 
@@ -31,7 +44,9 @@
         this.HideClass = string.Empty;
         this.StateHasChanged();
     }
-
+    /// <summary>
+    /// Shows the spinner component by setting TransClass, HideClass, and HideInnerClass to empty strings.
+    /// </summary>
     public void Show()
     {
 
@@ -40,7 +55,9 @@
         this.HideInnerClass = string.Empty;
         this.StateHasChanged();
     }
-
+    /// <summary>
+    /// Hides the spinner component by setting TransClass to empty and HideClass/HideInnerClass to 'sb-hide'.
+    /// </summary>
     public void Hide()
     {
         TransClass = string.Empty;
