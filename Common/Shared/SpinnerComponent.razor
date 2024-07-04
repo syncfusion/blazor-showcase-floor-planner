@@ -30,7 +30,10 @@
     /// </summary>
     [Parameter]
     public string? TransClass { get; set; }
-
+    /// <summary>
+    /// Gets or sets a value indicating whether the SpinnerComponent is visible or not.
+    /// </summary>
+    private bool VisibleProperty { get; set; } = true;
     /// <summary>
     /// Sets the TransClass and HideClass properties to display a transition effect.
     /// </summary>

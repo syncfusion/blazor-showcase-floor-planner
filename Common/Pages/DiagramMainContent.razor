@@ -702,9 +702,9 @@
         if(args.Action == CollectionChangedAction.Remove)
         {
             diagramSelected = true;
-            Parent.DiagramPropertyPanel.PanelVisibility(false);
+            Parent.DiagramPropertyPanel.PanelVisibility();
             Parent.DiagramPropertyPanel.BindDiagramProperties();
-            Parent.Toolbar.DiagramSelectionToolbarItems(false);
+            Parent.Toolbar.DiagramSelectionToolbarItems();
             StateHasChanged();
         }
     }

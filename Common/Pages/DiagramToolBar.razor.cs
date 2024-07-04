@@ -314,7 +314,7 @@ namespace FloorPlanner
         /// <summary>
         /// This method used to choose the toolbar icons to be displayed when a node or connector is selected.
         /// </summary>        
-        public void SingleSelectionToolbarItems(bool isRefresh = true)
+        public void SingleSelectionToolbarItems()
         {
             bool diagram = Parent.DiagramContent.diagramSelected;
             ShowFill = diagram ? false : !ShowFill ? true : ShowFill;
@@ -349,8 +349,7 @@ namespace FloorPlanner
             {
                 LockObject(true);
             }
-            if(isRefresh)
-                StateChanged();
+            StateChanged();
 
         }
         /// <summary>
@@ -375,9 +374,9 @@ namespace FloorPlanner
         /// <summary>
         /// Method to initialize the toolbar items.
         /// </summary>
-        public void DiagramSelectionToolbarItems(bool isRefresh = true)
+        public void DiagramSelectionToolbarItems()
         {
-            SingleSelectionToolbarItems(isRefresh);
+            SingleSelectionToolbarItems();
         }
         /// <summary>
         /// This method used to update the current zoom value of the Diagram.
