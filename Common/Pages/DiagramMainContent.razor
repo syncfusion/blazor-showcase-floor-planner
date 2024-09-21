@@ -522,7 +522,7 @@
     /// <param name="Json">The JSON representation of the diagram to load.</param>
     public void LoadNewDiagram(string Json)
     {
-        _= Diagram.LoadDiagram(Json);
+        _= Diagram.LoadDiagramAsync(Json);
     }
 
     /// <summary>
@@ -538,7 +538,7 @@
             HorizontalSpacing = value;
         else if (type == "Vertical")
             VerticalSpacing = value;
-        await diagram.EndUpdate();
+        await diagram.EndUpdateAsync();
     }
 
     /// <summary>
@@ -570,7 +570,7 @@
                 verticalAlignment = VerticalAlignment.Bottom;
                 break;
         }
-        await diagram.EndUpdate();
+        await diagram.EndUpdateAsync();
     }
        
     // Method to determine whether this command can execute or not.
