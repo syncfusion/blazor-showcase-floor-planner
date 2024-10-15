@@ -1462,7 +1462,7 @@
                     }
                 }
             }
-            _=Diagram.EndUpdateAsync();
+            _=Diagram.EndUpdate();
         }
     }
 
@@ -1765,7 +1765,7 @@
                         break;
                 }
             }
-            _=Diagram.EndUpdateAsync();
+            _=Diagram.EndUpdate();
         }
     }
 
@@ -1817,7 +1817,7 @@
                             ContentStyle.Opacity = Double.Parse(Value);
                             break;
                     }
-                    Parent.DiagramContent.Diagram.EndUpdateAsync();
+                    Parent.DiagramContent.Diagram.EndUpdate();
                 }
             }
         }
@@ -1951,7 +1951,7 @@
                 Style.TextAlign = TextAlign.Right;
                 break;
         }
-        await Parent.DiagramContent.Diagram.EndUpdateAsync();
+        await Parent.DiagramContent.Diagram.EndUpdate();
     }
 
 
@@ -2057,7 +2057,7 @@
                         NodeAnnotation.VerticalAlignment = VerticalAlignment.Bottom;
                         break;
                 }
-                await Parent.DiagramContent.Diagram.EndUpdateAsync();
+                await Parent.DiagramContent.Diagram.EndUpdate();
             }
         }
     }
@@ -2662,7 +2662,7 @@
                     break;
             }
         }
-        await Diagram.EndUpdateAsync();
+        await Diagram.EndUpdate();
     }
 
     /// <summary>
