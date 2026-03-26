@@ -44,25 +44,25 @@
     <meta name="description" content="Floor Planner shapes are used to represent an entire building, one floor of a building, or a single room. It may also include measurements, furniture, appliances, or anything else necessary to the purpose of the plan.">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link href="_content/Syncfusion.Blazor/styles/fluent.css" rel="stylesheet" />
+    <link href="@Assets["_content/Syncfusion.Blazor/styles/fluent2.css"]" rel="stylesheet" />
     <!-- To choose the proper font family -->
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
     <!-- To refer the icons for the sample -->
-    <link href="_content/BlazorServerCommon_NET8/assets/db-icons1/style.css" rel="stylesheet" />
+    <link href="@Assets["_content/BlazorServerCommon_NET10/assets/db-icons1/style.css"]" rel="stylesheet" />
     <!-- Conatins the Css property used in the sample level -->
-    <link href="_content/BlazorServerCommon_NET8/assets/dbstyle/diagrambuilder.css" rel="stylesheet" />
-    <script src="_content/BlazorServerCommon_NET8/interop.js" async></script> 
-    <script src="_content/Syncfusion.Blazor/scripts/syncfusion-blazor.min.js"></script>
+    <link href="@Assets["_content/BlazorServerCommon_NET10/assets/dbstyle/diagrambuilder.css"]" rel="stylesheet" />
+    <script src="@Assets["_content/BlazorServerCommon_NET10/interop.js"]" async></script> 
+    <script src="@Assets["_content/Syncfusion.Blazor/scripts/syncfusion-blazor.min.js"]"></script>
     <!-- Used for Property panel -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <!-- To include the need theme -->
 
     
-    <HeadOutlet @rendermode="@InteractiveServer" />
+    <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 
 <body>
-    <Routes @rendermode="@InteractiveServer" />
+    <Routes @rendermode="InteractiveServer" />
     <!-- Google Tag Manager (noscript) -->
     <!--Page Load-->
     <noscript>
@@ -80,7 +80,7 @@
         <environment include="Development">
         </environment>
     </div>
-    <script src="_framework/blazor.web.js"></script>
+    <script src="@Assets["_framework/blazor.web.js"]"></script>
 </body>
 
 </html>

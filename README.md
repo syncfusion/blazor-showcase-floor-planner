@@ -7,7 +7,7 @@ A floor plan is a type of drawing that shows you the layout of a home or propert
 
 * [System requirements](https://blazor.syncfusion.com/documentation/system-requirements/)
 
-* [NET 8 WebAssembly Workload](https://learn.microsoft.com/en-us/aspnet/core/blazor/webassembly-build-tools-and-aot?view=aspnetcore-8.0#net-webassembly-build-tools)
+* [NET 10 WebAssembly Workload](https://learn.microsoft.com/en-us/aspnet/core/blazor/webassembly-build-tools-and-aot?view=aspnetcore-10.0#net-webassembly-build-tools)
 
 ## How to run the demo
 
@@ -21,10 +21,10 @@ Clone the repository.This repository contains Blazor Floor Planner Server app, B
 * Open the command prompt from the demo's directory.
 * Run the demo using the following command.
    
-   To run .NET 8 Floor Planner Server project
+   To run .NET 10 Floor Planner Server project
    > `dotnet run --project Server/FloorPlanner.csproj`
 
-   To run .NET 8 Floor Planner WASM project
+   To run .NET 10 Floor Planner WASM project
    > `dotnet run --project WASM/FloorPlanner.sln`
 
 ### Run the demo using Visual Studio
