@@ -16,14 +16,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Setup .NET8
+    - name: Setup .NET10
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
-    - name: Setup .NET9
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
+        dotnet-version: 10.0.x
     - name: Build Server
       run: dotnet build ./Server/FloorPlanner.csproj
     - name: Build Wasm

@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.9.34310.174
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FloorPlanner", "FloorPlanner.csproj", "{88C042BB-3545-48EE-B10B-00667598F717}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerCommon_NET8", "..\Common\BlazorServerCommon_NET8.csproj", "{A591F156-AE9C-4956-89BA-C2E390CD1F47}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorServerCommon_NET10", "..\Common\BlazorServerCommon_NET10.csproj", "{01D79ED3-5591-1ECB-7D1F-8BECAA97D255}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{88C042BB-3545-48EE-B10B-00667598F717}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88C042BB-3545-48EE-B10B-00667598F717}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88C042BB-3545-48EE-B10B-00667598F717}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A591F156-AE9C-4956-89BA-C2E390CD1F47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A591F156-AE9C-4956-89BA-C2E390CD1F47}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A591F156-AE9C-4956-89BA-C2E390CD1F47}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A591F156-AE9C-4956-89BA-C2E390CD1F47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01D79ED3-5591-1ECB-7D1F-8BECAA97D255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01D79ED3-5591-1ECB-7D1F-8BECAA97D255}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01D79ED3-5591-1ECB-7D1F-8BECAA97D255}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01D79ED3-5591-1ECB-7D1F-8BECAA97D255}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

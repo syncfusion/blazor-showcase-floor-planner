@@ -39,23 +39,30 @@
             events.forEach(event => document.addEventListener(event, loadGTM, { once: true }));
         });
     </script>
-    <link href="_content/Syncfusion.Blazor/styles/fluent.css" rel="stylesheet" />
+    <link href="_content/Syncfusion.Blazor.Themes/fluent2.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>   
-    <link href="_content/BlazorWasmCommon_NET8/assets/db-icons1/style.css" rel="stylesheet" />
-    <link href="_content/BlazorWasmCommon_NET8/assets/dbstyle/diagrambuilder.css" rel="stylesheet" />
-    <link href="_content/BlazorWasmCommon_NET8/assets/db-icons1/style.min.css" rel="stylesheet" />
-    <link href="_content/BlazorWasmCommon_NET8/assets/dbstyle/diagrambuilder.min.css" rel="stylesheet" />
-    <script src="_content/BlazorWasmCommon_NET8/interop.min.js"></script>
-  
-    <script src="_content/Syncfusion.Blazor/scripts/syncfusion-blazor.min.js" type="text/javascript"></script>
-    <HeadOutlet @rendermode="@InteractiveWebAssembly" />
+        <link href="@Assets["_content/BlazorWasmCommon_NET10/assets/db-icons1/style.min.css"]" rel="stylesheet" />
+        <link href="@Assets["_content/BlazorWasmCommon_NET10/assets/dbstyle/diagrambuilder.min.css"]" rel="stylesheet" />
+        <script src="@Assets["_content/BlazorWasmCommon_NET10/interop.min.js"]"></script> 
+    <script src="@Assets["_content/Syncfusion.Blazor.Diagram/scripts/sf-diagramcomponent.min.js"]"></script>
+    <script src="@Assets["_content/Syncfusion.Blazor.Popups/scripts/sf-dialog.min.js"]"></script>
+    <script src="@Assets["_content/Syncfusion.Blazor.Inputs/scripts/sf-textbox.min.js"]"></script>
+    <script src="@Assets["_content/Syncfusion.Blazor.Inputs/scripts/sf-uploader.min.js"]"></script>
+    <script src="@Assets["_content/Syncfusion.Blazor.Inputs/scripts/sf-slider.min.js"]"></script>
+    <script src="@Assets["_content/Syncfusion.Blazor.Buttons/scripts/sf-checkbox.min.js"]"></script>
+    <script src="@Assets["_content/Syncfusion.Blazor.SplitButtons/scripts/sf-drop-down-button.min.js"]"></script>
+    <script src="@Assets["_content/Syncfusion.Blazor.DropDowns/scripts/sf-dropdownlist.min.js"]"></script>
+    <script src="@Assets["_content/Syncfusion.Blazor.Inputs/scripts/sf-numerictextbox.min.js"]"></script>
+    <script src="@Assets["_content/Syncfusion.Blazor.Inputs/scripts/sf-colorpicker.min.js"]"></script>
+    <script src="@Assets["_content/Syncfusion.Blazor.Navigations/scripts/sf-toolbar.min.js"]"></script>
+    <HeadOutlet @rendermode="InteractiveWebAssembly" />
 </head>
 
 <body>
     <div id="app"></div>
-    <Routes @rendermode="@InteractiveWebAssembly" />
+    <Routes @rendermode="InteractiveWebAssembly" />
     <!-- Google Tag Manager (noscript) -->
     <!--Page Load-->
     <noscript>
@@ -71,7 +78,7 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script src="_framework/blazor.web.js"></script>
+    <script src="@Assets["_framework/blazor.web.js"]"></script>
 </body>
 
 </html>
