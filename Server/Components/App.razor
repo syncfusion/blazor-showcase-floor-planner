@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject NavigationManager Urihelper
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,11 +38,16 @@
         });
     </script>
     <meta charset="UTF-8" />
-    <title>
-        Floor Planner  - Syncfusion Blazor Components Showcase App
-    </title>
+    <title>Floor Planner - Syncfusion Blazor Components Showcase App</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Floor Planner shapes are used to represent an entire building, one floor of a building, or a single room. It may also include measurements, furniture, appliances, or anything else necessary to the purpose of the plan.">
+    <meta name="description" content="Floor Planner shapes represent a building, a floor, or a room. They may also include measurements, furniture, appliances, and other plan details.">
+    <meta property="og:title" content="Floor Planner - Syncfusion Blazor Components Showcase App" />
+    <meta property="og:description" content="Floor Planner shapes represent a building, a floor, or a room. They may also include measurements, furniture, appliances, and other plan details." />
+    <meta property="og:url" content="https://showcase.syncfusion.com/floor-planner/blazor/" />
+    <meta property="og:image" content="@(Urihelper.BaseUri)diagram_component.svg" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link href="https://showcase.syncfusion.com/floor-planner/blazor/" rel="canonical" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="_content/Syncfusion.Blazor.Themes/fluent2.css" rel="stylesheet" />
